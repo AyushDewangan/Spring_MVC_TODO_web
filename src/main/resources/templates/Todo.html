@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>Employee Directory</title>
+	<title>Todo List</title>
+	<style>
+		.container {
+			border: 1px solid black;
+		}
+
+		.form-popup {
+			display: none;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div class="container">
+
+		<h3>Todo List</h3>
+		<hr>
+
+		<table class="table table-bordered table-striped" border=1>
+			<thead class="table-dark">
+				<tr>
+					<th>S. No.</th>
+					<th>Todo Task</th>
+					<th>To Do or Completed</th>
+					<th>Save Change</th>
+					<th>Remove Task</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr th:each="tempTodo : ${todoList}">
+					<td th:text="${tempTodo.id}" />
+					<!--<td th:text="${tempTodo.todoText}" />	-->
+					<td><input type="text" th:value="${tempTodo.todoText}"> </td>
+					<!--<td th:text="${tempTodo.completed} ? 'Completed' : 'To Do'" />	-->
+					<td>
+						<button onclick="updateTaskUpdate()">
+							<span th:text="${tempTodo.completed} ? 'Completed' : 'To Do'" />
+						</button>
+					</td>
+					<td>
+						<button onclick="callAPI()">
+							<span>Save Changes</span>
+						</button>
+					</td>
+					<td>
+						<input type="text" th:value="${tempTodo.id}" name="todoId" th:id="${tempTodo.id}" hidden><br>
+						<!--						<p th:text="${tempTodo.id}">				-->
+						<button th:onclick="removeTask(document.getElementById([[${tempTodo.id}]]))">
+							<span>Remove</span>
+						</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<button class="open-button" onclick="openForm()">Open Form</button>
+	<div class="form-popup" id="myForm">
+			<h1>Add Task</h1>
+			<label for="taskId"><b>Serial No.</b></label>
+			<input type="number" placeholder="Enter taskId" name="taskId" required>
+			<label for="taskText"><b>Task</b></label>
+			<input type="text" placeholder="Write Task" name="taskText" required>
+			<button type="submit" class="btn">A</button>
+			<button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+	</div>
+	
+	<script>
+		/*
+				function callAPI() {
+					// Create a new XMLHttpRequest object
+					var xhr = new XMLHttpRequest();
+					// Set the API endpoint URL
+					var url = "http://localhost:8080/todo/removeTodo/";
+					// Set the request method to GET
+					xhr.open("GET", url);
+					// Set the Content-Type header to application/json
+					xhr.setRequestHeader("Content-Type", "application/json");
+					// Send the request
+					xhr.send();
+					// Handle the response
+					xhr.onreadystatechange = function () {
+						if (xhr.readyState === 4 && xhr.status === 200) {
+							// The API call was successful
+							console.log(xhr.responseText);
+						} else {
+							// The API call failed
+							console.log("Error calling API");
+						}
+					}
+				}
+		*/
+		function removeTask(todoIds) {
+			//document.getElementById("demo1").innerHTML = todoIds;				//Printing the todoIds
+			var xhr = new XMLHttpRequest();
+			var todoId = parseInt(todoIds.value);
+			//document.getElementById("demo2").innerHTML = todoId;			//Printing todoId after int conversion
+			var url = "http://localhost:8080/todo/removeTodo/" + todoId;
+			//document.getElementById("demo").innerHTML = url;				//Printing the url
+			xhr.open("DELETE", url);
+			xhr.setRequestHeader("Content-Type", "application/json");
+			xhr.send();
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState === 4 && xhr.status === 200) {
+					console.log(xhr.responseText);
+				} else {
+					console.log("Error calling API");
+				}
+			}
+			AutoRefresh(100);
+		}
+
+		function updateTaskUpdate() {
+
+		}
+
+		function openForm() {
+			document.getElementById("myForm").style.display = "block";
+		}
+
+		function closeForm() {
+			document.getElementById("myForm").style.display = "none";
+		}
+
+		function AutoRefresh(t) {
+			setTimeout("location.reload(true);", t);
+		}
+	</script>
+</body>
+
+</html>
