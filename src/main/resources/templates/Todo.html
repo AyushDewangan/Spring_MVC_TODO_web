@@ -64,18 +64,19 @@
 			</tbody>
 		</table>
 	</div>
-	
+
 	<button class="open-button" onclick="openForm()">Open Form</button>
-	<div class="form-popup" id="myForm">
+	<form th:action="@{/todo/addTodo}" th:object="${todoList}" method="POST" }>
+		<div class="form-popup" id="myForm">
 			<h1>Add Task</h1>
-			<label for="taskId"><b>Serial No.</b></label>
-			<input type="number" placeholder="Enter taskId" name="taskId" required>
-			<label for="taskText"><b>Task</b></label>
-			<input type="text" placeholder="Write Task" name="taskText" required>
-			<button type="submit" class="btn">A</button>
+
+			<input type="text" field="*{id}" id="id" name="id">
+			<input type="text" field="*{todoText}" id="todoText" name="todoText">
+			<!--		<button onclick="addTask(taskId,taskText)" class="btn">A</button>					-->
+			<button type="submit" class="btn">Submit</button>
 			<button type="button" class="btn cancel" onclick="closeForm()">Close</button>
-	</div>
-	
+		</div>
+	</form>
 	<script>
 		/*
 				function callAPI() {
@@ -101,6 +102,26 @@
 					}
 				}
 		*/
+
+		//		function addTask(id,todoText) {
+		//			var xhr = new XMLHttpRequest();
+		//			var ItemJSON;
+		//			var completed = "false";
+		//			ItemJSON = '[  {    "id": '+id+',    "todoText": "'+todoText+'",    "completed": '+completed+'  }]';
+		//			var url = "http://localhost:8080/todo/addTodo?var=" + ItemJSON;
+		//			xhr.open("POST", url);
+		//			xhr.setRequestHeader("Content-Type", "application/json");
+		//
+		//			xhr.send();
+		//			xhr.onreadystatechange = function () {
+		//				if (xhr.readyState === 4 && xhr.status === 200) {
+		//					console.log(xhr.responseText);
+		//				} else {
+		//					console.log("Error calling API");
+		//				}
+		//			}
+		//		}
+
 		function removeTask(todoIds) {
 			//document.getElementById("demo1").innerHTML = todoIds;				//Printing the todoIds
 			var xhr = new XMLHttpRequest();
@@ -109,7 +130,7 @@
 			var url = "http://localhost:8080/todo/removeTodo/" + todoId;
 			//document.getElementById("demo").innerHTML = url;				//Printing the url
 			xhr.open("DELETE", url);
-			xhr.setRequestHeader("Content-Type", "application/json");
+			xhr.setReques//tHeader("Content-Type", "application/json");
 			xhr.send();
 			xhr.onreadystatechange = function () {
 				if (xhr.readyState === 4 && xhr.status === 200) {
@@ -119,10 +140,6 @@
 				}
 			}
 			AutoRefresh(100);
-		}
-
-		function updateTaskUpdate() {
-
 		}
 
 		function openForm() {
