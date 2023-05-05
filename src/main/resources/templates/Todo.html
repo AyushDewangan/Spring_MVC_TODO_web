@@ -91,10 +91,7 @@
 			var xhr = new XMLHttpRequest();
 			var todoId = parseInt(todoIds.value);
 			var newText = todoText.value;
-			document.getElementById("demo2").innerHTML = todoId;			//Printing todoId after int conversion
-			document.getElementById("demo1").innerHTML = newText;				//Printing the todoIds
 			var url = "http://localhost:8080/todo/updateTodo/" + todoId + "/" + newText;
-			document.getElementById("demo").innerHTML = url;				//Printing the url
 			xhr.open("PUT", url);
 			xhr.setRequestHeader("Content-Type", "application/json");
 			xhr.send();
@@ -105,7 +102,7 @@
 					console.log("Error calling API");
 				}
 			}
-			AutoRefresh(10000);
+			AutoRefresh(1000);
 		}
 
 		function removeTask(todoIds) {
