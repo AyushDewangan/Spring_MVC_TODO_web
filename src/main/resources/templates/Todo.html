@@ -40,7 +40,7 @@
 				<tr th:each="tempTodo : ${todoList}">
 					<td th:text="${tempTodo.id}" />
 					<!--<td th:text="${tempTodo.todoText}" />	-->
-					<td><input type="text" th:value="${tempTodo.todoText}" th:id="${todoText}"> </td>
+					<td><input type="text" th:value="${tempTodo.todoText}" th:id="${tempTodo.todoText}"> </td>
 					<!--<td th:text="${tempTodo.completed} ? 'Completed' : 'To Do'" />	-->
 					<td>
 						<input type="text" th:value="${tempTodo.id}" name="todoId" th:id="${tempTodo.id}" hidden>
@@ -49,7 +49,7 @@
 						</button>
 					</td>
 					<td>
-						<button th:onclick="updateTask(document.getElementById([[${tempTodo.id}]]),document.getElementById([[${todoText}]]))">
+						<button th:onclick="updateTask(document.getElementById([[${tempTodo.id}]]),document.getElementById([[${tempTodo.todoText}]]))">
 							<span>Save Changes</span>
 						</button>
 					</td>
@@ -105,9 +105,10 @@
 		function updateTask(todoIds, todoText){
 			var xhr = new XMLHttpRequest();
 			var todoId = parseInt(todoIds.value);
+			var newText = todoText.value;
 			document.getElementById("demo2").innerHTML = todoId;			//Printing todoId after int conversion
-			document.getElementById("demo1").innerHTML = todoText;				//Printing the todoIds
-			var url = "http://localhost:8080/todo/updateTodo/"+todoId+"/"+todoText;
+			document.getElementById("demo1").innerHTML = newText;				//Printing the todoIds
+			var url = "http://localhost:8080/todo/updateTodo/"+todoId+"/"+newText;
 			document.getElementById("demo").innerHTML = url;				//Printing the url
 			xhr.open("PUT", url);
 			xhr.setReques//tHeader("Content-Type", "application/json");

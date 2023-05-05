@@ -61,7 +61,8 @@ public class TodoRest {
 		todoService.updateTodoById(id, todoText);
 		List<Todo> list = todoService.getTodoList();
 		model.addAttribute("todoList", list);
-		return "redirect:/todo/getTodo";
+//		return "redirect:/todo/getTodo";
+		return "Todo";
 	}
 
 	@PutMapping("/updateTodoStatus/{id}")
