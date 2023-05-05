@@ -31,6 +31,7 @@ public class TodoRest {
 
 	@GetMapping("/getTodo")
 	public String getTodos(Model model) {
+		//log.info("enter in getTodo Rest");
 		List<Todo> list = todoService.getTodoList();
 		model.addAttribute("todoList", list);
 		return "Todo";
@@ -54,21 +55,22 @@ public class TodoRest {
 		return "Todo";
 	}
 
-	@PutMapping("/updateTodo")
-	public String updateTodo(@RequestBody Todo todo, Model model) {
-		todoService.updateTodo(todo);
+	@PutMapping("/updateTodo/{id}/{todoText}")
+	public String updateTodo(@PathVariable int id, @PathVariable String todoText, Model model) {
+		log.info("enter in updateTodo Rest with Requested Data : {}, {}", id, todoText);
+		todoService.updateTodoById(id, todoText);
+		List<Todo> list = todoService.getTodoList();
+		model.addAttribute("todoList", list);
+		return "redirect:/todo/getTodo";
+	}
+
+	@PutMapping("/updateTodoStatus/{id}")
+	public String updateTodoStatus(@PathVariable int id, Model model) {
+		log.info("enter in updateTodoStatus Rest with id : {}", id);
+		todoService.updateTodoStatus(id);
 		List<Todo> list = todoService.getTodoList();
 		model.addAttribute("todoList", list);
 		return "Todo";
 	}
-
-	// Might be not used for update the task completion update
-//	@PutMapping("/updateTaskCompletion")
-//	public String updateTaskCompletion(@RequestBody Todo todo, Model model) {
-//		todoService.updateTodo(todo);
-//		List<Todo> list = todoService.getTodoList();
-//		model.addAttribute("todoList", list);
-//		return "Todo";
-//	}
 
 }

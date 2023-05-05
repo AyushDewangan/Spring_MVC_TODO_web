@@ -6,7 +6,6 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<title>Employee Directory</title>
 	<title>Todo List</title>
 	<style>
 		.container {
@@ -41,15 +40,16 @@
 				<tr th:each="tempTodo : ${todoList}">
 					<td th:text="${tempTodo.id}" />
 					<!--<td th:text="${tempTodo.todoText}" />	-->
-					<td><input type="text" th:value="${tempTodo.todoText}"> </td>
+					<td><input type="text" th:value="${tempTodo.todoText}" th:id="${todoText}"> </td>
 					<!--<td th:text="${tempTodo.completed} ? 'Completed' : 'To Do'" />	-->
 					<td>
-						<button onclick="updateTaskUpdate()">
+						<input type="text" th:value="${tempTodo.id}" name="todoId" th:id="${tempTodo.id}" hidden>
+						<button th:onclick="updateTaskStatus(document.getElementById([[${tempTodo.id}]]))">
 							<span th:text="${tempTodo.completed} ? 'Completed' : 'To Do'" />
 						</button>
 					</td>
 					<td>
-						<button onclick="callAPI()">
+						<button th:onclick="updateTask(document.getElementById([[${tempTodo.id}]]),document.getElementById([[${todoText}]]))">
 							<span>Save Changes</span>
 						</button>
 					</td>
@@ -65,7 +65,7 @@
 		</table>
 	</div>
 
-	<button class="open-button" onclick="openForm()">Open Form</button>
+	<button class="open-button" onclick="openForm()">Add Task</button>
 	<form th:action="@{/todo/addTodo}" th:object="${todoList}" method="POST" }>
 		<div class="form-popup" id="myForm">
 			<h1>Add Task</h1>
@@ -77,51 +77,51 @@
 			<button type="button" class="btn cancel" onclick="closeForm()">Close</button>
 		</div>
 	</form>
+	url<p id="demo"></p>
+	text<p id="demo1"></p>
+	id<p id="demo2"></p>
 	<script>
-		/*
-				function callAPI() {
-					// Create a new XMLHttpRequest object
-					var xhr = new XMLHttpRequest();
-					// Set the API endpoint URL
-					var url = "http://localhost:8080/todo/removeTodo/";
-					// Set the request method to GET
-					xhr.open("GET", url);
-					// Set the Content-Type header to application/json
-					xhr.setRequestHeader("Content-Type", "application/json");
-					// Send the request
-					xhr.send();
-					// Handle the response
-					xhr.onreadystatechange = function () {
-						if (xhr.readyState === 4 && xhr.status === 200) {
-							// The API call was successful
-							console.log(xhr.responseText);
-						} else {
-							// The API call failed
-							console.log("Error calling API");
-						}
-					}
+	
+		function updateTaskStatus(todoIds){
+			//document.getElementById("demo1").innerHTML = todoIds;				//Printing the todoIds
+			var xhr = new XMLHttpRequest();
+			var todoId = parseInt(todoIds.value);
+			//document.getElementById("demo2").innerHTML = todoId;			//Printing todoId after int conversion
+			var url = "http://localhost:8080/todo/updateTodoStatus/" + todoId;
+			//document.getElementById("demo").innerHTML = url;				//Printing the url
+			xhr.open("PUT", url);
+			xhr.setReques//tHeader("Content-Type", "application/json");
+			xhr.send();
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState === 4 && xhr.status === 200) {
+					console.log(xhr.responseText);
+				} else {
+					console.log("Error calling API");
 				}
-		*/
-
-		//		function addTask(id,todoText) {
-		//			var xhr = new XMLHttpRequest();
-		//			var ItemJSON;
-		//			var completed = "false";
-		//			ItemJSON = '[  {    "id": '+id+',    "todoText": "'+todoText+'",    "completed": '+completed+'  }]';
-		//			var url = "http://localhost:8080/todo/addTodo?var=" + ItemJSON;
-		//			xhr.open("POST", url);
-		//			xhr.setRequestHeader("Content-Type", "application/json");
-		//
-		//			xhr.send();
-		//			xhr.onreadystatechange = function () {
-		//				if (xhr.readyState === 4 && xhr.status === 200) {
-		//					console.log(xhr.responseText);
-		//				} else {
-		//					console.log("Error calling API");
-		//				}
-		//			}
-		//		}
-
+			}
+			AutoRefresh(100);
+		}
+		
+		function updateTask(todoIds, todoText){
+			var xhr = new XMLHttpRequest();
+			var todoId = parseInt(todoIds.value);
+			document.getElementById("demo2").innerHTML = todoId;			//Printing todoId after int conversion
+			document.getElementById("demo1").innerHTML = todoText;				//Printing the todoIds
+			var url = "http://localhost:8080/todo/updateTodo/"+todoId+"/"+todoText;
+			document.getElementById("demo").innerHTML = url;				//Printing the url
+			xhr.open("PUT", url);
+			xhr.setReques//tHeader("Content-Type", "application/json");
+			xhr.send();
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState === 4 && xhr.status === 200) {
+					console.log(xhr.responseText);
+				} else {
+					console.log("Error calling API");
+				}
+			}
+			AutoRefresh(10000);
+		}
+		
 		function removeTask(todoIds) {
 			//document.getElementById("demo1").innerHTML = todoIds;				//Printing the todoIds
 			var xhr = new XMLHttpRequest();

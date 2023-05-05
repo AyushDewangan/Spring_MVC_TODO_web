@@ -13,4 +13,8 @@ public interface TodoService {
 	public void removeTodo(int id);
 
 	public void updateTodo(Todo todo);
+
+	public void updateTodoById(int id, String todoText);
+
+	public void updateTodoStatus(int id);
 }

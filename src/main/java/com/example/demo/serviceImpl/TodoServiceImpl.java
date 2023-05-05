@@ -1,6 +1,7 @@
 package com.example.demo.serviceImpl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,24 @@ public class TodoServiceImpl implements TodoService {
 	@Override
 	public void updateTodo(Todo todo) {
 		todoRepository.save(todo);
+		
+	}
+
+	@Override
+	public void updateTodoById(int id, String todoText) {
+		Optional<Todo> todo = todoRepository.findById(id);
+		todo.get().setTodoText(todoText);
+		todoRepository.save(todo.get());
+	}
+
+	@Override
+	public void updateTodoStatus(int id) {
+		Optional<Todo> todo = todoRepository.findById(id);
+		if(todo.get().isCompleted()==true)
+			todo.get().setCompleted(false);
+		else
+			todo.get().setCompleted(true);
+		todoRepository.save(todo.get());
 		
 	}
 
