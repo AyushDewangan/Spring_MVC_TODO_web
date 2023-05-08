@@ -14,58 +14,156 @@
 		.form-popup {
 			display: none;
 		}
+
+		h1 {
+			color: rgb(64, 36, 219);
+			text-align: center;
+		}
+
+		.remove {
+			color: darkred;
+			padding: 4px;
+			background-color: rgb(252, 117, 109);
+			font-size: 15px;
+			border-radius: 5px;
+			border-style: none;
+			cursor: pointer;
+		}
+
+		.remove:hover {
+			color: white;
+			padding: 4px;
+			background-color: rgb(253, 17, 17);
+			border-radius: 5px;
+		}
+
+		.changes {
+			color: rgb(255, 255, 255);
+			padding: 4px;
+			background-color: rgb(128, 128, 128);
+			font-size: 15px;
+			border-radius: 5px;
+			border-style: none;
+			cursor: pointer;
+		}
+
+		.changes:hover {
+			color: white;
+			padding: 4px;
+			background-color: rgb(192, 192, 192);
+			border-radius: 5px;
+		}
+
+		.status {
+			color: rgb(255, 255, 255);
+			padding: 4px;
+			background-color: rgb(128, 128, 128);
+			font-size: 15px;
+			border-radius: 5px;
+			border-style: none;
+			cursor: pointer;
+		}
+
+		.status:hover {
+			color: rgb(192, 192, 192);
+		}
+
+		.textTodo {
+			font-size: 15px;
+		}
+
+		.sno {
+			font-size: 20px;
+		}
+
+		.addTask {
+			color: rgb(255, 255, 255);
+			padding: 4px;
+			background-color: rgb(4, 196, 4);
+			font-size: 15px;
+			border-radius: 5px;
+			border-style: none;
+			cursor: pointer;
+			width: 200px;
+			margin-left: 40%;
+			margin-top: 10px;
+		}
+
+		.addTask:hover {
+			color: rgb(255, 255, 255);
+			padding: 4px;
+			background-color: rgb(3, 143, 3);
+			font-size: 15px;
+			border-radius: 5px;
+			border-style: none;
+			cursor: pointer;
+			width: 200px;
+		}
+		
+		.form-popup{
+			border: 1px solid black;
+			
+		}
+		
+		h3{
+			text-align: center;
+		}
+		
+		.sno-id{
+			width: 20px;
+		}
+		
+		.aligntocenter{
+			margin-left: 40%;
+		}
+		
 	</style>
 </head>
 
 <body>
 	<div class="container">
 
-		<h3>Todo List</h3>
+		<h1>Todo List</h1>
 		<hr>
-		<table class="table table-bordered table-striped" border=1>
-			<thead class="table-dark">
-				<tr>
-					<th>S. No.</th>
-					<th>Todo Task</th>
-					<th>To Do or Completed</th>
-					<th>Save Change</th>
-					<th>Remove Task</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="tempTodo : ${todoList}">
-					<td th:text="${tempTodo.id}" />
-					<td><input type="text" th:value="${tempTodo.todoText}" th:id="${tempTodo.todoText}"> </td>
-					<td>
-						<input type="text" th:value="${tempTodo.id}" name="todoId" th:id="${tempTodo.id}" hidden>
-						<button th:onclick="updateTaskStatus(document.getElementById([[${tempTodo.id}]]))">
-							<span th:text="${tempTodo.completed} ? 'Completed' : 'To Do'" />
-						</button>
-					</td>
-					<td>
-						<button
-							th:onclick="updateTask(document.getElementById([[${tempTodo.id}]]),document.getElementById([[${tempTodo.todoText}]]))">
-							<span>Save Changes</span>
-						</button>
-					</td>
-					<td>
-						<input type="text" th:value="${tempTodo.id}" name="todoId" th:id="${tempTodo.id}" hidden><br>
-						<button th:onclick="removeTask(document.getElementById([[${tempTodo.id}]]))">
-							<span>Remove</span>
-						</button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+		<center>
+			<table class="table table-bordered table-striped">
+				<tbody>
+					<tr th:each="tempTodo : ${todoList}">
+						<td class="sno" th:text="${tempTodo.id}" />
+						<td><input class="textTodo" type="text" th:value="${tempTodo.todoText}"
+								th:id="${tempTodo.todoText}"> </td>
+						<td>
+							<input type="text" th:value="${tempTodo.id}" name="todoId" th:id="${tempTodo.id}" hidden>
+							<button th:onclick="updateTaskStatus(document.getElementById([[${tempTodo.id}]]))"
+								class="status">
+								<span th:text="${tempTodo.completed} ? 'Completed' : 'To Do'" />
+							</button>
+						</td>
+						<td>
+							<button class="changes"
+								th:onclick="updateTask(document.getElementById([[${tempTodo.id}]]),document.getElementById([[${tempTodo.todoText}]]))">
+								<span>Save Changes</span>
+							</button>
+						</td>
+						<td>
+							<input type="text" th:value="${tempTodo.id}" name="todoId" th:id="${tempTodo.id}" hidden>
+							<button th:onclick="removeTask(document.getElementById([[${tempTodo.id}]]))" class="remove">
+								<span>Remove</span>
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</center>
 	</div>
-	<button class="open-button" onclick="openForm()">Add Task</button>
+	<button class="addTask" onclick="openForm()">Add Task</button>
 	<form th:action="@{/todo/addTodo}" th:object="${todoList}" method="POST" }>
 		<div class="form-popup" id="myForm">
-			<h1>Add Task</h1>
-			<input type="text" field="*{id}" id="id" name="id">
-			<input type="text" field="*{todoText}" id="todoText" name="todoText">
-			<button type="submit" class="btn">Submit</button>
-			<button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+			<h3>Add Task</h3>
+			<label for="id" class="aligntocenter">Id: </label><input type="text" field="*{id}" id="id" name="id"><br>
+			<label for="todoText" class="aligntocenter">To Do: </label><input type="text" field="*{todoText}" id="todoText" name="todoText"><br>
+			<button type="submit" class="btn addTask">Submit</button>
+			<button type="button" class="btn cancel remove" onclick="closeForm()">Close</button>
 		</div>
 	</form>
 	<script>
